@@ -169,7 +169,7 @@
         }
     }
     drawImg();
-    
+    var initScale = 1;
     //手势插件
     //element为需要监听手势的dom对象
     var af = new AlloyFinger(element, {
@@ -178,14 +178,17 @@
         },
         multipointStart: function () {
             //一个手指以上触摸屏幕触发
+            initScale = pinchRotateImg.scaleX;
         },
         rotate: function (evt) {
             //evt.angle代表两个手指旋转的角度
             console.log(evt.angle);
+            element.rotateZ+=evt.angle;
         },
         pinch: function (evt) {
             //evt.scale代表两个手指缩放的比例
             element.style.transform = 'scale('+evt.scale+')';
+            element.scaleX = element.scaleY = initScale * evt.zoom;
         },
         multipointEnd: function () {
             //当手指离开，屏幕只剩一个手指或零个手指触发
