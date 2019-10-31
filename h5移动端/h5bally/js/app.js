@@ -178,7 +178,8 @@
         },
         multipointStart: function () {
             //一个手指以上触摸屏幕触发
-            initScale = pinchRotateImg.scaleX;
+            initScale = element.scaleX;
+            To.stopAll();
         },
         rotate: function (evt) {
             //evt.angle代表两个手指旋转的角度
@@ -192,6 +193,33 @@
         },
         multipointEnd: function () {
             //当手指离开，屏幕只剩一个手指或零个手指触发
+            To.stopAll();
+            if (element.scaleX < 1) {
+
+                new To(element, "scaleX", 1, 500, ease);
+                new To(element, "scaleY", 1, 500, ease);
+            }
+            if (element.scaleX > 2) {
+
+                new To(element, "scaleX", 2, 500, ease);
+                new To(element, "scaleY", 2, 500, ease);
+            }
+            var rotation = element.rotateZ % 360;
+
+            if (rotation < 0)rotation = 360 + rotation;
+            element.rotateZ=rotation;
+
+            if (rotation > 0 && rotation < 45) {
+                new To(element, "rotateZ", 0, 500, ease);
+            } else if (rotation >= 315) {
+                new To(element, "rotateZ", 360, 500, ease);
+            } else if (rotation >= 45 && rotation < 135) {
+                new To(element, "rotateZ", 90, 500, ease);
+            } else if (rotation >= 135 && rotation < 225) {
+                new To(element, "rotateZ", 180, 500, ease);
+            } else if (rotation >= 225 && rotation < 315) {
+                new To(element, "rotateZ", 270, 500, ease);
+            }
         },
         pressMove: function (evt) {
             //evt.deltaX和evt.deltaY代表在屏幕上移动的距离
@@ -208,6 +236,23 @@
         },
         doubleTap: function (evt) {
             //双击屏幕触发
+            To.stopAll();
+            if (element.scaleX > 1.5) {
+
+                new To(element, "scaleX", 1, 500, ease);
+                new To(element, "scaleY", 1, 500, ease);
+                new To(element, "translateX", 0, 500, ease);
+                new To(element, "translateY", 0, 500, ease);
+            } else {
+                var box = element.getBoundingClientRect();
+                var y = box.height - (( evt.changedTouches[0].pageY - topPx) * 2) - (box.height / 2 - ( evt.changedTouches[0].pageY - topPx));
+
+                var x = box.width - (( evt.changedTouches[0].pageX) * 2) - (box.width / 2 - ( evt.changedTouches[0].pageX));
+                new To(element, "scaleX", 2, 500, ease);
+                new To(element, "scaleY", 2, 500, ease);
+                new To(element, "translateX", x, 500, ease);
+                new To(element, "translateY", y, 500, ease);
+            }
         },
         longTap: function (evt) {
             //长按屏幕750ms触发
