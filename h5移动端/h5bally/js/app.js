@@ -169,7 +169,7 @@
         }
     }
     drawImg();
-    
+
     var initScale = 1;
     
     function ease(x) {
@@ -209,22 +209,6 @@
 
                 new To(element, "scaleX", 2, 500, ease);
                 new To(element, "scaleY", 2, 500, ease);
-            }
-            var rotation = element.rotateZ % 360;
-
-            if (rotation < 0)rotation = 360 + rotation;
-            element.rotateZ=rotation;
-
-            if (rotation > 0 && rotation < 45) {
-                new To(element, "rotateZ", 0, 500, ease);
-            } else if (rotation >= 315) {
-                new To(element, "rotateZ", 360, 500, ease);
-            } else if (rotation >= 45 && rotation < 135) {
-                new To(element, "rotateZ", 90, 500, ease);
-            } else if (rotation >= 135 && rotation < 225) {
-                new To(element, "rotateZ", 180, 500, ease);
-            } else if (rotation >= 225 && rotation < 315) {
-                new To(element, "rotateZ", 270, 500, ease);
             }
         },
         pressMove: function (evt) {
