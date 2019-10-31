@@ -170,6 +170,11 @@
     }
     drawImg();
     var initScale = 1;
+    
+    function ease(x) {
+        return Math.sqrt(1 - Math.pow(x - 1, 2));
+    }
+    Transform(element);
     //手势插件
     //element为需要监听手势的dom对象
     var af = new AlloyFinger(element, {
@@ -223,12 +228,14 @@
         },
         pressMove: function (evt) {
             //evt.deltaX和evt.deltaY代表在屏幕上移动的距离
-            var elLeft = Number(getComputedStyle(element).left.replace("px",""));//获取拖动元素left值
-            var elTop = Number(getComputedStyle(element).top.replace("px",""));//获取拖动元素top值
-            elLeft += evt.deltaX;
-            elTop += evt.deltaY;
-            element.style.left = elLeft+'px';
-            element.style.top = elTop+'px';
+            // var elLeft = Number(getComputedStyle(element).left.replace("px",""));//获取拖动元素left值
+            // var elTop = Number(getComputedStyle(element).top.replace("px",""));//获取拖动元素top值
+            // elLeft += evt.deltaX;
+            // elTop += evt.deltaY;
+            // element.style.left = elLeft+'px';
+            // element.style.top = elTop+'px';
+            element.translateX += evt.deltaX;
+            element.translateY += evt.deltaY;
             evt.preventDefault();
         },
         tap: function (evt) {
@@ -236,23 +243,6 @@
         },
         doubleTap: function (evt) {
             //双击屏幕触发
-            To.stopAll();
-            if (element.scaleX > 1.5) {
-
-                new To(element, "scaleX", 1, 500, ease);
-                new To(element, "scaleY", 1, 500, ease);
-                new To(element, "translateX", 0, 500, ease);
-                new To(element, "translateY", 0, 500, ease);
-            } else {
-                var box = element.getBoundingClientRect();
-                var y = box.height - (( evt.changedTouches[0].pageY - topPx) * 2) - (box.height / 2 - ( evt.changedTouches[0].pageY - topPx));
-
-                var x = box.width - (( evt.changedTouches[0].pageX) * 2) - (box.width / 2 - ( evt.changedTouches[0].pageX));
-                new To(element, "scaleX", 2, 500, ease);
-                new To(element, "scaleY", 2, 500, ease);
-                new To(element, "translateX", x, 500, ease);
-                new To(element, "translateY", y, 500, ease);
-            }
         },
         longTap: function (evt) {
             //长按屏幕750ms触发
