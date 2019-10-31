@@ -43,6 +43,7 @@ var To=function (el, property, value, time, ease, onEnd,onChange ) {
         el[property] = dv * currentEase(dt / time) + current;
         self.tickID=requestAnimationFrame(toTick);
         //self.tickID = requestAnimationFrame(toTick);
+        //cancelAnimationFrame必须在 tickID = requestAnimationFrame(toTick);的后面
         onChange && onChange(el[property]);
     };
     toTick();

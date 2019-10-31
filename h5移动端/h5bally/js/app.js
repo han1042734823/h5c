@@ -169,6 +169,7 @@
         }
     }
     drawImg();
+    
     var initScale = 1;
     
     function ease(x) {
