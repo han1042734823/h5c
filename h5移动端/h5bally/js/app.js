@@ -251,6 +251,7 @@
   })();
   //阻止Safari等浏览器 页面缩放
   window.onload = function() {
+    // 阻止双击放大
     var lastTouchEnd = 0;
     document.addEventListener('touchstart', function(event) {
         if (event.touches.length > 1) {
@@ -264,10 +265,9 @@
         }
         lastTouchEnd = now;
     }, false);
+
+    // 阻止双指放大
     document.addEventListener('gesturestart', function(event) {
         event.preventDefault();
     });
-    document.addEventListener('dblclick', function (event) {
-        event.preventDefault();
-	})
-}
+  }
