@@ -185,7 +185,7 @@
         },
         pinch: function (evt) {
             //evt.scale代表两个手指缩放的比例
-            console.log(evt.scale);
+            element.style.transform = 'scale('+evt.scale+')';
         },
         multipointEnd: function () {
             //当手指离开，屏幕只剩一个手指或零个手指触发
@@ -196,12 +196,9 @@
             var elTop = Number(getComputedStyle(element).top.replace("px",""));//获取拖动元素top值
             elLeft += evt.deltaX;
             elTop += evt.deltaY;
-            console.log(elLeft,elTop);
             element.style.left = elLeft+'px';
             element.style.top = elTop+'px';
             evt.preventDefault();
-            console.log(evt.deltaX);
-            console.log(evt.deltaY);
         },
         tap: function (evt) {
             //点按触发
