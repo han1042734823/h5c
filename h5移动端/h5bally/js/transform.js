@@ -1,8 +1,5 @@
-/* transformjs
- * By dntzhang
- * Github: https://github.com/AlloyTeam/AlloyTouch/tree/master/transformjs
- */
-;(function () {
+
+(function () {
 
     var Matrix3D = function (n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33, n34, n41, n42, n43, n44) {
         this.elements =window.Float32Array ? new Float32Array(16) : [];
@@ -70,7 +67,6 @@
             return this;
 
         },
-        // 解决角度为90的整数倍导致Math.cos得到极小的数，其实是0。导致不渲染
         _rounded: function(value,i){
             i= Math.pow(10, i || 15);
             // default
@@ -172,7 +168,6 @@
         }
 
         element.scaleX = element.scaleY = element.scaleZ = 1;
-        //由于image自带了x\y\z，所有加上translate前缀
         element.translateX = element.translateY = element.translateZ = element.rotateX = element.rotateY = element.rotateZ = element.skewX = element.skewY = element.originX = element.originY = element.originZ = 0;
     }
 })();

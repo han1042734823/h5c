@@ -14,14 +14,16 @@
         listBtn = document.getElementsByClassName('b-list'),//绘制文字各项功能
         fontBox = document.getElementsByClassName('f-font')[0],//获取字体盒子
         colorBox = document.getElementsByClassName('f-color')[0],//获取颜色盒子
-        el = document.getElementsByClassName('alterBox')[0],//获取可拖拽的dom
+        element = document.getElementsByClassName('alterBox')[0],//获取可拖拽的dom
+        
         // fontBoxState = true,//字体盒子状态
         // colorBoxState = true,//颜色盒子状态
         footerState = true,//底部盒子状态
         colorState = true,//颜色状态
         ctx = canvas.getContext('2d'),
-        ctxW = window.innerWidth; //获取页面宽高
+        ctxW = window.innerWidth, //获取页面宽高
         ctxH = window.innerHeight;
+
         canvas.width = ctxW;//设置canvas的宽高及背景色
         canvas.height = ctxH;
         canvas.style.backgroundColor='rgb(245,245,245)';
@@ -176,87 +178,49 @@
     
     //手势插件
     //element为需要监听手势的dom对象
-    var af = new AlloyFinger(el, {
+    var af = new AlloyFinger(element, {
         pointStart: function () {
             //手指触摸屏幕触发
         },
         multipointStart: function () {
             //一个手指以上触摸屏幕触发
-            To.stopAll();
-            initScale = el.scaleX;
         },
         rotate: function (evt) {
             //evt.angle代表两个手指旋转的角度
-            el.rotateZ += evt.angle;
+            console.log(evt.angle);
         },
         pinch: function (evt) {
             //evt.scale代表两个手指缩放的比例
-            el.scaleX = el.scaleY = initScale * evt.zoom;
+            console.log(evt.scale);
         },
         multipointEnd: function () {
             //当手指离开，屏幕只剩一个手指或零个手指触发
-            To.stopAll();
-                if (el.scaleX < 1) {
-
-                    new To(el, "scaleX", 1, 500, ease);
-                    new To(el, "scaleY", 1, 500, ease);
-                }
-                if (el.scaleX > 2) {
-
-                    new To(el, "scaleX", 2, 500, ease);
-                    new To(el, "scaleY", 2, 500, ease);
-                }
-                var rotation = el.rotateZ % 360;
-
-                if (rotation < 0)rotation = 360 + rotation;
-                el.rotateZ=rotation;
-
-                if (rotation > 0 && rotation < 45) {
-                    new To(el, "rotateZ", 0, 500, ease);
-                } else if (rotation >= 315) {
-                    new To(el, "rotateZ", 360, 500, ease);
-                } else if (rotation >= 45 && rotation < 135) {
-                    new To(el, "rotateZ", 90, 500, ease);
-                } else if (rotation >= 135 && rotation < 225) {
-                    new To(el, "rotateZ", 180, 500, ease);
-                } else if (rotation >= 225 && rotation < 315) {
-                    new To(el, "rotateZ", 270, 500, ease);
-                }
         },
         pressMove: function (evt) {
             //evt.deltaX和evt.deltaY代表在屏幕上移动的距离
-            el.translateX += evt.deltaX;
-            el.translateY += evt.deltaY;
+            var elLeft = Number(getComputedStyle(element).left.replace("px",""));//获取拖动元素left值
+            var elTop = Number(getComputedStyle(element).top.replace("px",""));//获取拖动元素top值
+            elLeft += evt.deltaX;
+            elTop += evt.deltaY;
+            console.log(elLeft,elTop);
+            element.style.left = elLeft;
+            element.style.top = elTop;
             evt.preventDefault();
+            console.log(evt.deltaX);
+            console.log(evt.deltaY);
         },
         tap: function (evt) {
             //点按触发
         },
         doubleTap: function (evt) {
             //双击屏幕触发
-        To.stopAll();
-            if (el.scaleX > 1.5) {
-
-                new To(el, "scaleX", 1, 500, ease);
-                new To(el, "scaleY", 1, 500, ease);
-                new To(el, "translateX", 0, 500, ease);
-                new To(el, "translateY", 0, 500, ease);
-            } else {
-                var box = el.getBoundingClientRect();
-                var y = box.height - (( evt.changedTouches[0].pageY - topPx) * 2) - (box.height / 2 - ( evt.changedTouches[0].pageY - topPx));
-
-                var x = box.width - (( evt.changedTouches[0].pageX) * 2) - (box.width / 2 - ( evt.changedTouches[0].pageX));
-                new To(el, "scaleX", 2, 500, ease);
-                new To(el, "scaleY", 2, 500, ease);
-                new To(el, "translateX", x, 500, ease);
-                new To(el, "translateY", y, 500, ease);
-            }
         },
         longTap: function (evt) {
             //长按屏幕750ms触发
         },
         swipe: function (evt) {
             //evt.direction代表滑动的方向
+            console.log("swipe" + evt.direction);
         },
         singleTap: function (evt) {
             //单击
