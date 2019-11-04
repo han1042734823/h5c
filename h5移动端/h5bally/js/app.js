@@ -44,8 +44,8 @@
         thickState = true,//加粗状态
         ctx = canvas.getContext('2d'),
         ctxW = window.innerWidth, //获取页面宽高
-        ctxH = window.innerHeight;
-
+        ctxH = 548;
+        container.style.height = window.innerHeight+'px';//设置最大盒子高度
         canvas.width = ctxW;//设置canvas的宽高及背景色
         canvas.height = ctxH;
         canvas.style.backgroundColor='rgb(245,245,245)';
@@ -455,10 +455,3 @@ window.onload = function() {
         event.preventDefault();
     });
 }
-
-window.ontouchmove=function(e){
-    e.preventDefault && e.preventDefault();
-    e.returnValue=false;
-    e.stopPropagation && e.stopPropagation();
-    return false;
-};
