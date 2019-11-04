@@ -18,6 +18,11 @@
         fOff = document.getElementsByClassName('f-pul'),//获取字体确定或离开节点
         cItem = document.getElementsByClassName('c-item')[0],//获取颜色列表节点
         cOff = document.getElementsByClassName('c-pul'),//获取颜色确定或离开节点
+        createImgNode = document.getElementsByClassName('create-img')[0],//获取生成按钮节点
+        closeEle = document.getElementsByClassName('a-close'),//获取拖拽元素关闭及缩放按钮
+        closeImg = document.getElementsByClassName('img-close')[0],//获取关闭生成的图片
+        showImgBox = document.getElementsByClassName('show-img')[0],
+        base64Img = '',
         fontList = [
             {font:'微软雅黑'},
             {font:'宋体'},
@@ -44,7 +49,7 @@
         thickState = true,//加粗状态
         ctx = canvas.getContext('2d'),
         ctxW = window.innerWidth, //获取页面宽高
-        ctxH = 548;
+        ctxH = '548';
         container.style.height = window.innerHeight+'px';//设置最大盒子高度
         canvas.width = ctxW;//设置canvas的宽高及背景色
         canvas.height = ctxH;
@@ -68,14 +73,10 @@
         element.style.display = dragState?'block':'none';
         dragState = !dragState;
 
-        clickParalle();//变横向
+        // clickParalle();//变横向
 
-        element.style.fontWeight = 'normal';//变细
-        changeWhite(2);
-        thickState = true;
-        // fontBox.style.display = 'none';//更改字体盒子高度
-        // colorBox.style.display = 'none'//更改颜色盒子高度
-
+        // thickState = false;
+        // clickOverstriking();//加粗
 
     }
     //遍历颜色
@@ -170,6 +171,36 @@
         fOff[0].onclick = function(){
             clickFont();
         }
+    }
+    //点击关闭
+    function clickCloseEle(){
+        closeEle[0].onclick = function(){
+            iconBtnMethod();
+            iconBtn.style.display = 'none';
+            colorwhite(0);
+        }
+    }
+    clickCloseEle();
+
+    //生成图片
+    function createBaseImg(){
+        element.style.overflow = 'hidden';
+        element.style.borderColor = 'rgba(245, 118, 118,0)';
+        closeEle[0].style.display='none';
+        closeEle[1].style.display='none';
+        //dom生成canvas
+        html2canvas(content,{
+            onrendered: function(canvas) {
+               canvasNode = canvas;
+               console.log(canvas);
+               }
+           }
+        );
+        setTimeout(createImg,100);
+    }
+    //点击生成图片
+    createImgNode.onclick = function(){
+        createBaseImg();
     }
 
     //点击收缩
@@ -303,18 +334,11 @@
         (function(i){
             SCAndFX[i].onclick = function(){
                 if(i==0){
-                    createImg();
+                    
                     console.log('收藏操作');
                 }
                 if(i==1){
-                    //dom生成canvas
-                    html2canvas(content,{
-                         onrendered: function(canvas) {
-                            canvasNode = canvas;
-                            console.log(canvas);
-                            }
-                        }
-                    )
+                    
                     console.log('分享操作');
                 }
             }
@@ -334,10 +358,21 @@
 
     //生成图片
     function createImg(){
-        var base64Img = canvasNode.toDataURL('image/png');
+        base64Img = canvasNode.toDataURL('image/png');
         console.log(base64Img);
+        showImgBox.style.display = 'block';
+        console.log(document.getElementsByClassName('s-img')[0].src = base64Img);
+        element.style.overflow = 'unset';
+        element.style.borderColor = 'rgba(245, 118, 118,1)';
+        closeEle[0].style.display='block';
+        closeEle[1].style.display='block';
+        
     }
-    
+    //关闭生成的图片
+    closeImg.onclick = function(){
+        showImgBox.style.display = 'none';
+    }
+
     //绘制图片
     function drawImg() {
         ctx.clearRect(0,0,ctxW, ctxH);
@@ -355,7 +390,8 @@
     drawImg();
 
     var initScale = 1;
-    
+    var maxWidth = window.innerWidth;
+    var maxHeight = 11.7*window.innerWidth/10;
     function ease(x) {
         return Math.sqrt(1 - Math.pow(x - 1, 2));
     }
@@ -403,8 +439,16 @@
             // elTop += evt.deltaY;
             // element.style.left = elLeft+'px';
             // element.style.top = elTop+'px';
+            // if(element.offsetLeft){
+
+            // }
             element.translateX += evt.deltaX;
             element.translateY += evt.deltaY;
+            //限制移动位置
+            element.translateX = element.translateX>=maxWidth-element.offsetWidth/5*4?maxWidth-element.offsetWidth/5*4:element.translateX;
+            element.translateX = element.translateX<=0-element.offsetWidth/5*4?0-element.offsetWidth/5*4:element.translateX;
+            element.translateY = element.translateY>=maxHeight-element.offsetHeight/5*4?maxHeight-element.offsetHeight/5*4:element.translateY;
+            element.translateY = element.translateY<=0-element.offsetHeight/5*4?0-element.offsetHeight/5*4:element.translateY;
             evt.preventDefault();
         },
         tap: function (evt) {
@@ -422,6 +466,7 @@
         },
         singleTap: function (evt) {
             //单击
+            console.log(evt.changedTouches[0]);
         }
     });
 

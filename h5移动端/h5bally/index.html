@@ -21,7 +21,7 @@
         }
         body{
             overflow: hidden;
-            font-family: PingFang;
+            font-family: 'PingFang';
         }
         ul,li{
             list-style: none;
@@ -35,13 +35,13 @@
             background-color: rgb(245,245,245);
         }
         .content{
-            height: 548px;
+            height: 11.7rem;
             width: 100%;
             position: relative;
         }
         .sidebar{
             position: absolute;
-            top:2.8rem;
+            top:4.2rem;
             right:0.6rem;
             width:1rem;
             height:1rem;
@@ -53,7 +53,7 @@
             border-radius: 50%;
         }
         #container .sidebar:nth-of-type(2){
-            top:1.2rem;
+            top:2.6rem;
         }
         /*操作部分*/
         .footer{
@@ -267,7 +267,7 @@
             top:1rem;
             left:1rem;
             font-size: 0.5rem;
-            padding: 0.1rem 0.5rem;
+            padding:0.3rem 0.5rem;
             display: none;
             width:4rem;
             max-width:6rem;
@@ -277,7 +277,10 @@
             max-height:8rem;
             line-height: 1rem;
             text-align: center;
-            border:1px dashed rgb(245, 118, 118);
+            border-width:1px;
+            border-style:dashed;
+            border-color: rgb(245, 118, 118);
+            font-family: '微软雅黑';
             /* width:fit-content;
             width:-webkit-fit-content;
             width:-moz-fit-content; */
@@ -289,6 +292,9 @@
             text-align: center;
             line-height:0.6rem;
             font-size: 0.5rem;
+        }
+        .alterBox .a-text{
+            letter-spacing:3px;
         }
         .alterBox .a-close:nth-of-type(1){
             left:-0.3rem;
@@ -335,6 +341,51 @@
         input::-webkit-input-placeholder{
             color:#ccc;
         }
+        .create-img{
+            position: absolute;
+            width:2rem;
+            height:0.8rem;
+            top:1rem;
+            right:0.5rem;
+            line-height: 0.8rem;
+            text-align: center;
+            background-color:rgb(71,70,66);
+            font-size: 0.4rem;
+            color:#fff;
+        }
+        .show-img{
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,.5);
+            position: fixed;
+            z-index: 20;
+            top:0;
+            left: 0;
+            text-align: center;
+            display: none;
+        }
+        .show-img img{
+            width:8rem;
+            height: 9.36rem;
+        }
+        .show-img p{
+            font-size: 0.8rem;
+            color: #fff;
+            margin-top:1.5rem;
+            margin-bottom:0.6rem;
+        }
+        .show-img p:last-of-type{
+            margin-top:0.2rem;
+        }
+        .hide-input{
+            width:100%;
+            height:100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            opacity: 0;
+        }
     </style>
 </head>
 <body>
@@ -346,11 +397,18 @@
                 <div class='a-close font_family icon-Hicon-16'></div>
                 <div class='a-close font_family icon-Hicon-15'></div>
                 <span class='a-text'>请输入内容</span>
+                <input type="text" class='hide-input'>
             </div>
             <canvas id='c-canvas'></canvas>
         </div>
         <div class='sidebar font_family icon-Hicon_huaban'></div>
         <div class='sidebar font_family icon-Hicon-2'></div>
+        <div class='create-img'><span>生成</span></div>
+        <div class='show-img'>
+            <p>生成成功</p>
+            <img class='s-img' src="" alt="">
+            <p><span class='img-close'>关闭</span></p>
+        </div>
         <!-- 底部 -->
        
         <div class='footer'>
