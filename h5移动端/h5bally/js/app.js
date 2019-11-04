@@ -80,7 +80,7 @@
     }
     //遍历颜色
     function getColorList(){
-        cItem.style.width = (colorList.length+1)*1.4+'rem';
+        cItem.style.width = (colorList.length+1)*1.45+'rem';
         for(var i=0;i<colorList.length;i++){
             var li=document.createElement("li");  //创建元素节点
             var bAttr=document.createAttribute("class"); //创建属性节点
@@ -128,7 +128,7 @@
 
     //遍历字体
     function getFontList(){
-        fItem.style.width = (fontList.length+1)*2.4+'rem';
+        fItem.style.width = (fontList.length+1)*2.5+'rem';
         for(var i=0;i<fontList.length;i++){
             var li=document.createElement("li");  //创建元素节点
             var bAttr=document.createAttribute("class"); //创建属性节点
@@ -153,7 +153,6 @@
                     }
                     folorIndex = i;
                     fList[i].style.borderColor = '#000';
-
                     eleText.style.fontFamily = fontList[i].font;
                     console.log(fontList[i].font);
                 }
@@ -428,14 +427,14 @@
 
 
   //移动端适配
-  (function change(){
+(function change(){
     var oFz = document.getElementsByTagName("html")[0];
     var width = window.innerWidth;
     oFz.style.fontSize = width/10 +"px";
     window.onresize=function(){change();};
-  })();
-  //阻止Safari等浏览器 页面缩放
-  window.onload = function() {
+})();
+//阻止Safari等浏览器 页面缩放
+window.onload = function() {
     // 阻止双击放大
     var lastTouchEnd = 0;
     document.addEventListener('touchstart', function(event) {
@@ -455,4 +454,11 @@
     document.addEventListener('gesturestart', function(event) {
         event.preventDefault();
     });
-  }
+}
+
+window.ontouchmove=function(e){
+    e.preventDefault && e.preventDefault();
+    e.returnValue=false;
+    e.stopPropagation && e.stopPropagation();
+    return false;
+};
