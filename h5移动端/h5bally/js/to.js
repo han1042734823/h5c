@@ -43,7 +43,7 @@ var To=function (el, property, value, time, ease, onEnd,onChange ) {
         el[property] = dv * currentEase(dt / time) + current;
         self.tickID=requestAnimationFrame(toTick);
         //self.tickID = requestAnimationFrame(toTick);
-        //cancelAnimationFrame±ØÐëÔÚ tickID = requestAnimationFrame(toTick);µÄºóÃæ
+        //cancelAnimationFrameï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ tickID = requestAnimationFrame(toTick);ï¿½Äºï¿½ï¿½ï¿½
         onChange && onChange(el[property]);
     };
     toTick();

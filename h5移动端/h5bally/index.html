@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>bally</title>
+    <script src='./js/html2canvas.min.js'></script>
+    <script src='./js/canvas2image.js'></script>
+    <script src='./js/base64.js'></script>
     <link rel="stylesheet" href="./css/iconfont.css">
     <style>
         html,body,div,h1,h2,h3,h4,h5,ul,li,span,canvas,p,input,i,a,img{
@@ -31,11 +34,13 @@
             position: relative;
         }
         .content{
+            height: 568px;
+            width: 100%;
             position: relative;
         }
-        .content .sidebar{
+        .sidebar{
             position: absolute;
-            top:1.2rem;
+            top:2.8rem;
             right:0.6rem;
             width:1rem;
             height:1rem;
@@ -46,14 +51,15 @@
             background-color: rgb(204,204,204);
             border-radius: 50%;
         }
-        .content .sidebar:nth-of-type(2){
-            top:2.8rem;
+        #container .sidebar:nth-of-type(2){
+            top:1.2rem;
         }
         /*操作部分*/
         .footer{
             position:fixed;
             width:100%;
             overflow: hidden;
+            z-index: 10;
             bottom:-2.5rem;
             background-color: #fff;
         }
@@ -68,6 +74,7 @@
             width:0.6rem;
             height: 0.6rem;
             left:0;
+            top: 2px;
             right: 0;
             margin: auto;
             border:1px solid rgb(205,205,205);
@@ -97,6 +104,7 @@
             margin: 0 0.3rem;
             color: rgb(180,180,180);
         }
+        
         .f-top .round-box{
             position: relative;
             float: left;
@@ -107,6 +115,9 @@
             border:1px solid rgb(205,205,205);
             border-radius: 50%;
             box-shadow: 0 0 2px rgb(180,180,180);
+        }
+        .f-top .f-t-nav .r-round{
+            margin-left: 0.4rem;
         }
         .f-top .round-box .b-icon{
             position: absolute;
@@ -166,26 +177,159 @@
         /* 字体和颜色容器部分 */
         .f-middle{
             width:100%;
-            height: 3rem;
-            /* display: none; */
+            height: 4.5rem;
             position: fixed;
-            bottom: -3rem;
-            z-index:2;
+            bottom: -4.5rem;
+            z-index:10;
+        }
+        .f-middle .color-all,.f-middle .font-all{
+            width: 100%;
+            height:3rem;
+            overflow: hidden;
+        }
+        .color-all .c-box,.font-all .f-box{
+            width:100%;
+            height:3.2rem;
+            overflow-x:scroll;
+            overflow-y:hidden;
+        }
+        .color-all .c-box .c-item,.font-all .f-box .f-item{
+            display: flex;
+            height: 2.8rem;
+            align-items: center;
+            flex-grow: 1;
+            text-align: center;
+        }
+        .f-box .f-item .f-list{
+            width:2rem;
+            height:1rem;
+            line-height: 1rem;
+            font-size: 0.4rem;
+            box-sizing:border-box;
+            margin-left:20px;
+            border-width: 1px;
+            border-color:#fff;
+            border-style: solid;
+        }
+        .color-all .c-box .c-item .c-list{
+            position: relative;
+            width:1rem;
+            height:1rem;
+            box-sizing:border-box;
+            margin-left:20px;
+            border-width: 2px;
+        }
+        .color-all .c-box .c-item .c-list .c-list-b{
+            width:0.7rem;
+            height:0.7rem;
+            position: absolute;
+            top:0;
+            left:0;
+            right: 0;
+            bottom: 0;
+            margin:auto;
+        }
+        .f-middle .color-confirm,.f-middle .font-confirm{
+            width: 100%;
+            height:1.5rem;
+            position: relative;
+        }
+        .color-confirm .c-pul,.font-confirm .f-pul{
+            height:1rem;
+            width: 1rem;
+            font-size:0.4rem;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            text-align: center;
+            line-height: 1rem;
+        }
+        .color-confirm .c-false,.font-confirm .f-false{
+            left:0.3rem;
+        }
+        .color-confirm .c-true,.font-confirm .f-true{
+            right:0.3rem;
         }
         .f-font{
-            background-color: #fff445;
+            background-color: #fff;
         }
         .f-color{
-            background-color: #4466aa;
+            background-color: #fff;
         }
         .alterBox{
-            width: 4rem;
-            height: 2rem;
-            background-color:#fff445;
             position: absolute;
             z-index: 9;
-            top:4rem;
-            left:3rem;
+            top:1rem;
+            left:1rem;
+            font-size: 0.5rem;
+            padding: 0.1rem 0.5rem;
+            display: none;
+            width:4rem;
+            max-width:6rem;
+            width: auto;
+            height:1rem;
+            height:auto!important;
+            max-height:8rem;
+            line-height: 1rem;
+            text-align: center;
+            border:1px dashed rgb(245, 118, 118);
+            /* width:fit-content;
+            width:-webkit-fit-content;
+            width:-moz-fit-content; */
+        }
+        .alterBox .a-close{
+            position: absolute;
+            width:0.6rem;
+            height:0.6rem;
+            text-align: center;
+            line-height:0.6rem;
+            font-size: 0.5rem;
+        }
+        .alterBox .a-close:nth-of-type(1){
+            left:-0.3rem;
+            top: -0.3rem;
+        }
+        .alterBox .a-close:nth-of-type(2){
+            right:-0.3rem;
+            bottom: -0.3rem;
+        }
+        .ctx-input{
+            width: 100%;
+            height:1.5rem;
+            position: fixed;
+            bottom:0.5rem;
+            border:1px solid #fff;
+            background-color: #fff;
+        }
+        .ctx-input .input-data{
+            position: absolute;
+            top:0;
+            left:2%;
+            bottom: 0;
+            margin: auto;
+            width:80%;
+            height:80%;
+            font-size: 0.4rem;
+            border:1px solid #eee;
+            text-indent: 10px;
+            outline: none;
+        }
+        .vertical{
+            -webkit-writing-mode: vertical-rl;
+            writing-mode: vertical-rl;
+        }
+        .text-bold{
+            font-weight: bold;
+        }
+        input::-moz-placeholder{
+            color:#ccc;
+        }
+        input::-ms-input-placeholder{
+            color:#ccc;
+        }
+        input::-webkit-input-placeholder{
+            color:#ccc;
         }
     </style>
 </head>
@@ -193,11 +337,18 @@
     <div id='container'>
         <!-- canvas部分 -->
         <div class='content'>
+            <!-- 字体颜色盒子 -->
+            <div class="alterBox">
+                <div class='a-close font_family icon-Hicon-16'></div>
+                <div class='a-close font_family icon-Hicon-15'></div>
+                <span class='a-text'>请输入内容</span>
+            </div>
             <canvas id='c-canvas'></canvas>
-            <div class='sidebar font_family icon-Hicon_huaban'></div>
-            <div class='sidebar font_family icon-Hicon-2'></div>
         </div>
+        <div class='sidebar font_family icon-Hicon_huaban'></div>
+        <div class='sidebar font_family icon-Hicon-2'></div>
         <!-- 底部 -->
+       
         <div class='footer'>
             <div class='f-top'>
                 <div class='f-t-nav'>
@@ -243,16 +394,37 @@
                 </ul>
             </div>
         </div>
-        <!-- 字体颜色盒子 -->
+        <div class='ctx-input'>
+            <input type="text" class='input-data' oninput='onPropChanged(event)' placeholder="请输入内容">
+        </div>
         <div class='f-middle f-font '>
-
+                <div class='font-all'>
+                    <div class='f-box'>
+                        <ul class='f-item'>
+                        </ul>
+                    </div>
+                </div>
+                <div class='font-confirm'>
+                    <div class='f-pul f-false font_family icon-Hicon-1'></div>
+                    <div class='f-pul f-true font_family '></div>
+                </div>
         </div>
         <div class='f-middle f-color'>
-
+            <div class='color-all'>
+                <div class='c-box'>
+                    <ul class='c-item'>
+                    </ul>
+                </div>
+            </div>
+            <div class='color-confirm'>
+                <div class='c-pul c-false font_family icon-Hicon-1'></div>
+                <div class='c-pul c-true font_family '></div>
+            </div>
         </div>
-        <div class='alterBox'></div>
+        
     </div>
 </body>
+
 <script src="./js/to.js"></script>
 <script src="./js/transform.js"></script>
 <script src="./js/alloy_finger.js"></script>

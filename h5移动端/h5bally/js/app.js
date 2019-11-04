@@ -1,19 +1,47 @@
 
     var iconBtn = document.getElementsByClassName('f-t-icon')[0],//获取展开图标
         canvas = document.getElementById('c-canvas'),//获取canvas并生成环境
+        content = document.getElementsByClassName('content')[0],//获取canvasdom节点
+        canvasNode = '',//储存canvas节点
         footerEle = document.getElementsByClassName('footer')[0],//获取底部盒子
         triangle = document.getElementsByClassName('icon-top')[0],//获取展开三角
         navNode = document.getElementsByClassName('f-t-nav'),//绘制文字购物车节点
         SCAndFX = document.getElementsByClassName('sidebar'),//收藏和分享
         listBtn = document.getElementsByClassName('b-list'),//绘制文字各项功能
-        fontBox = document.getElementsByClassName('f-font')[0],//获取字体盒子
-        colorBox = document.getElementsByClassName('f-color')[0],//获取颜色盒子
+        fontBox = document.getElementsByClassName('f-font')[0],//获取字体按钮盒子
+        colorBox = document.getElementsByClassName('f-color')[0],//获取颜色按钮盒子
         element = document.getElementsByClassName('alterBox')[0],//获取可拖拽的dom
-        
-        // fontBoxState = true,//字体盒子状态
-        // colorBoxState = true,//颜色盒子状态
+        eleText = document.getElementsByClassName('a-text')[0],//拖拽dom文字
+        inputNode = document.getElementsByClassName('ctx-input')[0],//获取input节点
+        inputValue = document.getElementsByClassName('input-data')[0],//获取input值
+        fItem = document.getElementsByClassName('f-item')[0],//获取字体列表节点
+        fOff = document.getElementsByClassName('f-pul'),//获取字体确定或离开节点
+        cItem = document.getElementsByClassName('c-item')[0],//获取颜色列表节点
+        cOff = document.getElementsByClassName('c-pul'),//获取颜色确定或离开节点
+        fontList = [
+            {font:'微软雅黑'},
+            {font:'宋体'},
+            {font:'楷体'}
+        ]
+        colorList = [
+            {color:'#FFFF00'},
+            {color:'#CCFF00'},
+            {color:'#99FF00'},
+            {color:'#FFCC00'},
+            {color:'#CCCC00'},
+            {color:'#FF9900'},
+            {color:'#FF66FF'},
+            {color:'#FF0000'},
+            {color:'#9900FF'},
+            {color:'#3333FF'},
+            {color:'#FF6600'}],//颜色列表
+        fontBoxState = true,//字体盒子状态
+        colorBoxState = true,//颜色盒子状态
         footerState = true,//底部盒子状态
-        colorState = true,//颜色状态
+        colorState = true,//绘制文字或购物车颜色状态
+        inputState = true,//输入框状态
+        dragState = true,//拖拽框状态 
+        thickState = true,//加粗状态
         ctx = canvas.getContext('2d'),
         ctxW = window.innerWidth, //获取页面宽高
         ctxH = window.innerHeight;
@@ -23,17 +51,129 @@
         canvas.style.backgroundColor='rgb(245,245,245)';
    
 
-    //点击展开图标方法
+    //点击展开或关闭底部盒子方法
     function iconBtnMethod(){
-        footerEle.style.bottom = footerState?'0':'-2.5rem';
         triangle.style.transform = footerState?'rotate(180deg)':'rotate(0deg)';
-        footerEle.style.transition = '.2s'
-        footerState = !footerState;
 
+        footerEle.style.bottom = footerState?'0':'-2.5rem';//底部盒子变化
+        footerEle.style.transition = '.2s';
+        footerState = !footerState;
+        
+        inputNode.style.bottom = inputState?'4.5rem':'0.5rem';//input框变化
+        inputNode.style.transition = inputState?'.2s':'0s';
+        inputState = !inputState;
+
+        // element.innerHTML = '请输入内容';//清空输入框内容
+        inputValue.value = '';
+        element.style.display = dragState?'block':'none';
+        dragState = !dragState;
+
+        clickParalle();//变横向
+
+        element.style.fontWeight = 'normal';//变细
+        changeWhite(2);
+        thickState = true;
         // fontBox.style.display = 'none';//更改字体盒子高度
         // colorBox.style.display = 'none'//更改颜色盒子高度
+
+
     }
-    //点击展开收缩高度
+    //遍历颜色
+    function getColorList(){
+        cItem.style.width = (colorList.length+1)*1.4+'rem';
+        for(var i=0;i<colorList.length;i++){
+            var li=document.createElement("li");  //创建元素节点
+            var bAttr=document.createAttribute("class"); //创建属性节点
+            bAttr.value='c-list';
+            li.style.backgroundColor=colorList[i].color;
+            li.setAttributeNode(bAttr);
+            cItem.appendChild(li);
+
+            var div=document.createElement("div");  //创建元素节点
+            var cAttr=document.createAttribute("class"); //创建属性节点
+            cAttr.value='c-list-b';
+            div.setAttributeNode(cAttr);
+            li.appendChild(div);
+            
+        }
+    }
+    getColorList();//遍历颜色
+    //点击颜色操作
+    function clickColorList(){
+        var cList = document.getElementsByClassName('c-list');
+        var cListDiv = document.getElementsByClassName('c-list-b');
+        var colorIndex;
+        for(var i=0;i<cList.length;i++){
+            (function(i){
+                cList[i].onclick = function(){
+                    if(colorIndex||colorIndex==0){
+                        cList[colorIndex].style.backgroundColor = colorList[colorIndex].color;//上一个去掉样式
+                        cList[colorIndex].style.borderColor='';
+                        cList[colorIndex].style.borderStyle='';
+                        cListDiv[colorIndex].style.backgroundColor = '';
+                    }
+                    colorIndex = i;
+                    cList[i].style.backgroundColor = '';//更换颜色的样式
+                    cList[i].style.borderColor=colorList[i].color;
+                    cList[i].style.borderStyle='solid';
+                    cListDiv[i].style.backgroundColor = colorList[i].color;
+
+                    eleText.style.color = colorList[i].color;
+                }
+            }(i));
+        }
+        clickLeave();//点击离开
+    }
+    clickColorList();//点击颜色
+
+    //遍历字体
+    function getFontList(){
+        fItem.style.width = (fontList.length+1)*2.4+'rem';
+        for(var i=0;i<fontList.length;i++){
+            var li=document.createElement("li");  //创建元素节点
+            var bAttr=document.createAttribute("class"); //创建属性节点
+            bAttr.value='f-list';
+            li.style.fontWeight=fontList[i].font;
+            var fontText = document.createTextNode(fontList[i].font);
+            li.setAttributeNode(bAttr);
+            li.appendChild(fontText);
+            fItem.appendChild(li);
+        }
+    }
+    getFontList();//遍历字体
+    //点击字体操作
+    function clickFontList(){
+        var fList = document.getElementsByClassName('f-list');
+        var folorIndex;
+        for(var i=0;i<fList.length;i++){
+            (function(i){
+                fList[i].onclick = function(){
+                    if(folorIndex||folorIndex==0){
+                        fList[folorIndex].style.borderColor = '#fff';
+                    }
+                    folorIndex = i;
+                    fList[i].style.borderColor = '#000';
+
+                    eleText.style.fontFamily = fontList[i].font;
+                    console.log(fontList[i].font);
+                }
+            }(i));
+        }
+        clickLeave();//点击离开
+    }
+    clickFontList();//点击字体
+
+    //点击离开
+    function clickLeave(){
+        cOff[0].onclick = function(){
+            clickColor();
+        }
+        fOff[0].onclick = function(){
+            clickFont();
+        }
+    }
+
+    //点击收缩
     iconBtn.onclick = function(){
         if(!footerState){
             iconBtnMethod();
@@ -62,49 +202,70 @@
         }
         
     }
-    
+    //字体变黑方法
+    function changeBlock(i){
+        listBtn[i].classList.add('checked-list');
+    }
+    //字体变白方法
+    function changeWhite(i){
+        listBtn[i].classList.remove('checked-list');
+    }
     //点击字体操作方法
     function clickFont(){
-        if(fontBox.style.display=='none'){
-            listBtn[4].classList.add('checked-list');
-        }else{
-            listBtn[4].classList.remove('checked-list');
-        }
-        listBtn[3].classList.remove('checked-list');
-        // fontBox.style.transition = '.2s';
-        // fontBox.style.height = fontBoxState?'3rem':'0rem';
+        fontBoxState?changeBlock(4): changeWhite(4);
+        changeWhite(3);
+        fontBox.style.transition = '.2s';
+        fontBox.style.bottom = fontBoxState?'0':'-4.5rem';
         // colorBox.style.display = 'none';
         // fontBox.style.display = fontBox.style.display=='none'?'block':'none';
-        // fontBoxState = !fontBoxState;
+        fontBoxState = !fontBoxState;
     }
 
     //点击颜色操作方法
     function clickColor(){
-        if(colorBox.style.display=='none'){
-            listBtn[3].classList.add('checked-list');
-        }else{
-            listBtn[3].classList.remove('checked-list');
-        }
-        listBtn[4].classList.remove('checked-list');
-        // colorBox.style.transition = '.2s';
-        // fontBox.style.display = 'none'
+        colorBoxState?changeBlock(3): changeWhite(3);
+        changeWhite(4);
+        colorBox.style.bottom = colorBoxState?'0':'-4.5rem';
+        colorBox.style.transition = '.2s';
         // colorBox.style.height = colorBoxState?'3rem':'0rem';
+        // fontBox.style.display = 'none'
         // colorBox.style.display = colorBox.style.display=='none'?'block':'none';
-        // colorBoxState = !colorBoxState;
+        colorBoxState = !colorBoxState;
     }
-
+    //加粗操作
+    function clickOverstriking(){
+        thickState?changeBlock(2):changeWhite(2);
+        eleText.style.fontWeight = thickState?'bold':'normal';
+        // element.classList.add('text-bold');
+        thickState = !thickState;
+    }
+    //横向操作
+    function clickParalle(){
+        changeBlock(0);
+        changeWhite(1);
+        element.classList.remove('vertical');
+    }
+    //竖向操作
+    function clickVertical(){
+        changeBlock(1);
+        changeWhite(0);
+        element.classList.add('vertical');
+    }
     //点击绘制文字各项功能操作
     for(var i=0;i<listBtn.length;i++){
         (function(i){
             listBtn[i].onclick = function(){
                 switch(i){
                     case 0:
+                        clickParalle();
                         console.log('横向操作');
                         break;
                     case 1:
+                        clickVertical();
                         console.log('竖向操作');
                         break;
                     case 2:
+                        clickOverstriking();
                         console.log('加粗操作');
                         break;
                     case 3:
@@ -126,9 +287,8 @@
             navNode[i].onclick = function(){
                 if(i==0){
                     //绘制文字操作
-                    colorblank(i);
-                    
-                    drawText();
+                    colorblank(i);//点击颜色变黑
+                    drawText();//显示节点
                     console.log('绘制文字');
                 }
                 if(i==1){
@@ -144,16 +304,41 @@
         (function(i){
             SCAndFX[i].onclick = function(){
                 if(i==0){
+                    createImg();
                     console.log('收藏操作');
                 }
                 if(i==1){
+                    //dom生成canvas
+                    html2canvas(content,{
+                         onrendered: function(canvas) {
+                            canvasNode = canvas;
+                            console.log(canvas);
+                            }
+                        }
+                    )
                     console.log('分享操作');
                 }
             }
         }(i));
     }
 
+    //监听input事件
+    function onPropChanged(event){
+        console.log(inputValue.value);
+        if(inputValue.value==''){
+            eleText.innerHTML = '请输入内容';
+        }else{
+            eleText.innerHTML = inputValue.value;
+        }
+        // eleText.innerHTML = inputValue.value;
+    }
 
+    //生成图片
+    function createImg(){
+        var base64Img = canvasNode.toDataURL('image/png');
+        console.log(base64Img);
+    }
+    
     //绘制图片
     function drawImg() {
         ctx.clearRect(0,0,ctxW, ctxH);
