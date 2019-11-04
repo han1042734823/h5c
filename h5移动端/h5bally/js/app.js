@@ -80,7 +80,7 @@
     }
     //遍历颜色
     function getColorList(){
-        cItem.style.width = (colorList.length+1)*1.45+'rem';
+        cItem.style.width = (colorList.length+1)*1.5+'rem';
         for(var i=0;i<colorList.length;i++){
             var li=document.createElement("li");  //创建元素节点
             var bAttr=document.createAttribute("class"); //创建属性节点
