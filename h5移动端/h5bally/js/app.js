@@ -184,7 +184,6 @@
 
     //生成图片
     function createBaseImg(){
-        element.style.overflow = 'hidden';
         element.style.borderColor = 'rgba(245, 118, 118,0)';
         closeEle[0].style.display='none';
         closeEle[1].style.display='none';
@@ -361,8 +360,6 @@
         base64Img = canvasNode.toDataURL('image/png');
         console.log(base64Img);
         showImgBox.style.display = 'block';
-        console.log(document.getElementsByClassName('s-img')[0].src = base64Img);
-        element.style.overflow = 'unset';
         element.style.borderColor = 'rgba(245, 118, 118,1)';
         closeEle[0].style.display='block';
         closeEle[1].style.display='block';
