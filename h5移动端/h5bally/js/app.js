@@ -431,6 +431,7 @@
         }
     }
     drawImg();
+    
 
     var initScale = 1;
     var maxWidth = window.innerWidth;
@@ -448,7 +449,7 @@
         multipointStart: function () {
             //一个手指以上触摸屏幕触发
             initScale = element.scaleX;
-            // To.stopAll();
+            To.stopAll();
         },
         rotate: function (evt) {
             //evt.angle代表两个手指旋转的角度
