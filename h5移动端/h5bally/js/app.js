@@ -447,7 +447,7 @@
         },
         multipointStart: function () {
             //一个手指以上触摸屏幕触发
-            // initScale = element.scaleX;
+            initScale = element.scaleX;
             // To.stopAll();
         },
         rotate: function (evt) {
