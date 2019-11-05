@@ -21,7 +21,8 @@
         createImgNode = document.getElementsByClassName('create-img')[0],//获取生成按钮节点
         closeEle = document.getElementsByClassName('a-close'),//获取拖拽元素关闭及缩放按钮
         closeImg = document.getElementsByClassName('img-close')[0],//获取关闭生成的图片
-        showImgBox = document.getElementsByClassName('show-img')[0],
+        showImgBox = document.getElementsByClassName('show-img')[0],//显示图片
+        imgSite = 'http://img.ibaiqiu.com/pim-upload/6226219-124-1-1699-2-main.jpg',//开始要绘制的图片地址
         base64Img = '',
         fontList = [
             {font:'微软雅黑'},
@@ -63,10 +64,9 @@
         footerEle.style.bottom = footerState?'0':'-2.5rem';//底部盒子变化
         footerEle.style.transition = '.2s';
         footerState = !footerState;
-        
-        inputNode.style.bottom = inputState?'4.5rem':'0.5rem';//input框变化
-        inputNode.style.transition = inputState?'.2s':'0s';
-        inputState = !inputState;
+
+        // inputNode.style.bottom = '0.5rem';
+        // inputNode.style.transition = '0s';
 
         // element.innerHTML = '请输入内容';//清空输入框内容
         inputValue.value = '';
@@ -200,6 +200,23 @@
     //点击生成图片
     createImgNode.onclick = function(){
         createBaseImg();
+    }
+
+    //点击文字焦点获取到input
+    eleText.onclick = function(){
+        if(inputState){
+            inputNode.style.bottom = '4.5rem';
+            inputNode.style.transition = '.2s';
+        }
+        // inputNode.style.bottom = inputState?'4.5rem':'0.5rem';//input框变化
+        // inputNode.style.transition = inputState?'.2s':'0s';
+        inputValue.focus();
+
+    }
+    //ipnut失去焦点
+    inputValue.onblur = function(){
+        inputNode.style.bottom = '0.5rem';
+        inputNode.style.transition = '0s';
     }
 
     //点击收缩
@@ -376,7 +393,7 @@
         ctx.clearRect(0,0,ctxW, ctxH);
         img = new Image();//生成图片
         img.setAttribute("crossOrigin",'anonymous');//需要放在图片赋值前，否则部分浏览器会报错
-        img.src = 'http://img.ibaiqiu.com/pim-upload/6226219-124-1-1699-2-main.jpg';//图片地址
+        img.src = imgSite;//图片地址
         //img.crossOrigin='Anonymous';
         
         var imposeH =  getComputedStyle(document.getElementsByTagName('html')[0])['font-size'];//获取底部高度
@@ -414,6 +431,7 @@
             //evt.scale代表两个手指缩放的比例
             element.style.transform = 'scale('+evt.scale+')';
             element.scaleX = element.scaleY = initScale * evt.zoom;
+            console.log(evt.scale,evt.zoom);
         },
         multipointEnd: function () {
             //当手指离开，屏幕只剩一个手指或零个手指触发
@@ -464,7 +482,7 @@
         },
         singleTap: function (evt) {
             //单击
-            console.log(evt.changedTouches[0]);
+            console.log(evt);
         }
     });
 
