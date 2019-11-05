@@ -1,0 +1,370 @@
+@charset "utf-8";
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+* {
+    touch-action: pan-y;
+}
+body {
+	width: 100%;
+	min-width: 320px;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	font-family: PingFangSC-Regular, sans-serif;
+	font-size: 12px;
+}
+
+select {
+	-moz-appearance: none;
+	appearance: none;
+	-webkit-appearance: none;
+}
+
+input[type="text"],
+input[type="password"] {
+	-webkit-appearance: none;
+}
+
+input:focus {
+	outline: none;
+}
+
+button {
+	background: none;
+	border: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: normal;
+}
+
+ul,
+ol,
+li {
+	list-style: none;
+}
+
+i,
+em {
+	font-style: normal;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+img {
+	border: none;
+	vertical-align: middle;
+}
+
+a {
+	text-decoration: none;
+	cursor: pointer;
+	outline: none;
+	color: #000;
+}
+.section {
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+.continer {
+	background-image: url(../Public/Home/images/img_bally/bgImg.jpg);
+	min-height: 100vh;
+	width: 100vw;
+	overflow-x:hidden; 
+	padding-bottom: 20px;
+	position: relative;
+}
+body{
+	font-family:'SourceHanSansCN-Light';
+}
+/*适配320以上屏幕*/
+
+@media (min-width:320px) {
+	html {
+		font-size: 108px !important;
+	}
+}
+
+
+/*适配360以上屏幕*/
+
+@media (min-width:360px) {
+	html {
+		font-size: 112px !important;
+	}
+}
+
+
+/*适配400以上屏幕*/
+
+@media (min-width:400px) {
+	html {
+		font-size: 125px !important;
+	}
+}
+
+
+/*适配480以上屏幕*/
+
+@media (min-width:480px) {
+	html {
+		font-size: 150px !important;
+	}
+	.videoBlock {
+		height: 2rem !important;
+	}
+}
+
+
+/*适配540以上屏幕*/
+
+@media (min-width:540px) {
+	html {
+		font-size: 168px !important;
+	}
+}
+
+
+/*适配640以上屏幕*/
+
+@media (min-width:640px) {
+	html {
+		font-size: 200px !important;
+	}
+	.videoBlock {
+		height: 2.01rem !important;
+	}
+}
+
+
+/*适配720以上屏幕*/
+
+@media (min-width:720px) {
+	html {
+		font-size: 225px !important;
+	}
+}
+
+
+/*适配769以上屏幕*/
+
+@media (min-width:769px) {
+	html {
+		font-size: 240px !important;
+	}
+}
+
+
+/*适配800以上屏幕*/
+
+@media (min-width:800px) {
+	html {
+		font-size: 256px !important;
+	}
+}
+
+
+/*适配1025以上屏幕*/
+
+@media (min-width:1025px) {
+	html {
+		font-size: 265px !important;
+	}
+}
+
+
+/*适配1200以上屏幕*/
+
+@media (min-width:1200px) {
+	html {
+		font-size: 302px !important;
+	}
+}
+body{
+	position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.imgs {
+	width: 100%;
+	height: auto;
+}
+/*背景图片*/
+.page_bg{
+	background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center
+}
+.page_try{
+	position: relative;
+	width: 100%;
+	height: 100vh;
+	background-image: url(../img/bg-try.jpg);
+}
+.page_logo{
+	width: 100%;
+	height: 0.75rem;
+	background-size: auto 50%;
+	background-image: url(../img/logo.png);
+}
+.page_showImg{
+	width: 100%;
+}
+.cropper-box,.move-box,.finish{
+	position: relative;
+    width: 2.18rem;
+    height: 3.05rem;
+    overflow: hidden;
+    text-align: center;
+    margin: 0 auto 0.11rem;
+    border: 0.02rem solid #8f7853;
+}
+.finish{
+  	border: 0rem solid #8f7853;
+}
+.move-box {
+    display: none;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+#corp-img,#finishImage{
+	width: 100%;
+	height: 100%;
+}
+.chooseWatches{
+	position: relative;
+	margin: -0.08rem auto 0;
+	width:2.18rem;
+	height: 0.64rem;
+	border: 0.02rem solid #8f7853;
+    background-color: #000;
+    overflow: hidden;
+}
+.watches{
+	float: left;
+    width: 33.3%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+}
+.watchesBlack{
+	background-image: url(../img/biao-0-ms.png);
+}
+.watchesGolden{
+	background-image: url(../img/biao-1-ms.png);
+}
+.watchesWhite{
+	background-image: url(../img/biao-2-ms.png);
+}
+/*移动手表的样式*/
+.js-divobject {
+	width: 1.3rem;
+    height: 1.3rem;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    border: 0px;
+    position: absolute;
+    box-sizing: border-box;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    transform: rotate(-22deg);
+    background-position: center center;
+}
+.br2{
+	border: 2px solid rgb(143, 120, 83);
+}
+.js-divobject .bg-border {
+    position: absolute;
+    z-index: -1;
+    left: -2%;
+    top: -2%;
+    width: 104%;
+    height: 104%;
+    background-color: transparent;
+}
+.js-divobject .bg-border .icon-rotate {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url(../img/icon-rotate.png);
+    transform: translate(-9px,-9px);
+}
+.tipsTap{
+	margin: -0.11rem auto 0;
+    width: 2.18rem;
+    min-height: 0.325rem;
+    background-image: url(../img/tips-tap.jpg);
+}
+/*按钮样式*/
+.page_btn{
+	width: 2.18rem;
+	margin: 0 auto;
+	margin-top: 0.09rem;
+	text-align: center;
+}
+.page_btnLeft{
+	float: left;
+}
+.page_btnRight{
+	margin-top: 0.005rem;
+	float: right;
+}
+.hidden{
+	display: none;
+}
+.btn-upload{
+	display: inline-block;
+	margin: 0 auto;
+    width: 0.685rem;
+    margin-left: 0.21rem;
+    height: 0.3rem;
+    background-image: url(../img/btn-upload.jpg);
+    background-size: contain;
+}
+#btn-tolink{
+	display: inline-block;
+	margin-right: 0.21rem;
+	width: 0.685rem;
+	height: 0.3rem;
+}
+#btn-toend{
+	display: inline-block;
+	width: 0.685rem;
+	height: 0.3rem;
+}
+#btn-toend .imgs{
+	height: 100%;
+}
+.btn-confimCropper,.btn-finish{
+	margin: 0 auto;
+	width: 1.28rem;
+	height: 0.3rem;
+	background-size: contain;
+}
+.btn-confimCropper{
+	background-image: url(../img/btn-rightclip.jpg);
+}
+.btn-finish{
+	background-image: url(../img/btn-creatimg.jpg);
+}
+

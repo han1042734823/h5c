@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="apple-mobile-app-capable" content="yes">
+		<meta http-equiv="cache-control" content="no-cache">
+		<title>爱彼CODE</title>
+		<link rel="stylesheet" type="text/css" href="css/list.css" />
+		<link rel="stylesheet" type="text/css" href="css/cropper.css" />
+	</head>
+
+	<body>
+		<!--试戴页面开发-->
+		<div class="page_try page_bg">
+			<div class="page_logo page_bg"></div>
+			<!--照片显示-->
+			<div class="page_showImg">
+				<div class="cropper-box">
+					<img src="img/mask-hand.png" id="corp-img" />
+				</div>
+				<div id="object-div" class="move-box" style="margin: 0px auto; border-bottom-width: 0px;">
+					<div class="js-divobject hidden">
+						<div class="bg-border hidden">
+							<div class="icon-rotate"></div>
+						</div>
+					</div>
+				</div>
+				<div class="finish hidden">
+					<img src="" id="finishImage" />
+					<img src="" id="shareImage" class="hidden" />
+					<canvas id="canvasEnd" width="640" height="1134" class="hidden"></canvas>
+					<!--选取佩戴的手表-->
+				</div>
+				<div class="tipsTap  page_bg hidden"></div>
+				<div class="chooseWatches hidden">
+					<div class="watches watchesBlack page_bg" data-src="img/biao-0-ms.png"></div>
+					<div class="watches watchesGolden page_bg" data-src="img/biao-1-ms.png"></div>
+					<div class="watches watchesWhite page_bg" data-src="img/biao-2-ms.png"></div>
+				</div>
+			</div>
+			<!--按钮-->
+			<div class="page_btn">
+				<div class="page_updateBtn" style="width: 100%;">
+					<div class="page_btnLeft">
+						<label class="radioInput">
+					        <input id="file-img" type="file" name="" accept="image/*" class="hidden">
+					        <label for="file-img" class="page_bg  btn-upload"></label>
+						</label>
+					</div>
+					<div class="page_btnRight">
+						<a id="btn-tolink" href="https://www.audemarspiguet.com/zh-hans/watch-browser/#group-by=collection">
+							<img class="imgs" src="img/btn-tolink.jpg" alt="">
+						</a>
+					</div>
+				</div>
+				<!--确定裁剪照片-->
+				<div class="page_confirmBtn hidden" style="width: 100%;">
+					<div class="btn-confimCropper page_bg"></div>
+				</div>
+				<!--完成试戴-->
+				<div class="page_finishBtn hidden" style="width: 100%;">
+					<div class="btn-finish page_bg"></div>
+				</div>
+				<!--探索与预约-->
+				<div class="page_toendBtn hidden" style="width: 100%;">
+					<div class="page_btnLeft">
+						<a id="btn-tolink" href="https://www.audemarspiguet.com/zh-hans/watch-browser/#group-by=collection">
+							<img class="imgs" src="img/btn-tolink.jpg" alt="">
+						</a>
+					</div>
+					<div class="page_btnRight">
+						<a id="btn-toend" href="##"><img class="imgs" src="img/btn-toend.jpg" alt=""></a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+	<script src="js/lib/jquery-1.12.3.js"></script>
+	<script src="js/lib/cropper.js"></script>
+	<script src="js/lib/html2canvas.min.js"></script>
+	<script type="text/javascript">
+		var cropper = null, //实例化的裁剪图片
+			cropperFinish = false, //判断图片是否裁剪完成
+            obgW=130,
+			objectDeg=-22;  //手表试戴的默认旋转度数
+		$("#file-img").change(function() {
+			var changeImg = this.files[0];
+			if(!this.files || !this.files[0]) {
+				return
+			}
+			if(changeImg.type.indexOf("image") < 0) {
+				alert("请上传有效的照片");
+				return
+			}
+			var labelImg = document.getElementById("corp-img");
+			labelImg.onload = function() {
+				cropperImg(this)
+			};
+			labelImg.src = getObjURL(changeImg)
+		});
+		//对路径上传的图片进行兼容性处理
+		function getObjURL(changeImg) {
+			var ImgUrl = null;
+			if(window.createObjectURL != undefined) {
+				ImgUrl = window.createObjectURL(changeImg)
+			} else {
+				if(window.URL != undefined) {
+					ImgUrl = window.URL.createObjectURL(changeImg)
+				} else {
+					if(window.webkitURL != undefined) {
+						ImgUrl = window.webkitURL.createObjectURL(changeImg)
+					}
+				}
+			}
+			return ImgUrl
+		}
+		//对上传的图片进行H5裁剪
+		var cropperImg = function(labelImg) {
+			if(cropperFinish) return;
+			var imgBox = {
+				width: $(".cropper-box").width(),
+				height: $(".cropper-box").height()
+			};
+			cropper = new Cropper(labelImg, {
+				aspectRatio: imgBox.width / imgBox.height,
+				aspectRatio: imgBox.width / imgBox.height,
+				movable: true,
+				cropBoxMovable: false,
+				viewMode: 3,
+				dragMode: "move",
+				autoCropArea: 1,
+				restore: false,
+				highlight: false,
+				cropBoxMovable: false,
+				cropBoxResizable: false,
+				minContainerWidth: imgBox.width,
+				minContainerHeight: imgBox.height,
+				minCanvasWidth: imgBox.width,
+				minCanvasHeight: imgBox.height,
+				minCropBoxWidth: imgBox.width,
+				minCropBoxHeight: imgBox.height,
+				ready: function() {
+					cropperFinish = true;
+					$(".page_updateBtn").hide();
+					$(".page_confirmBtn").show();
+				}
+			})
+		}
+		//点击确定裁剪图片 
+		$('.btn-confimCropper').on("click", function() {
+			if(!cropper || !cropperFinish) return;
+			cropperFinish = false;
+			var F = cropper.getCroppedCanvas();
+			var E = F.toDataURL("image/jpeg");
+			$("#corp-img").attr("src", E);
+			$(".move-box").css("background-image", "url(" + E + ")");
+			$(".cropper-box").hide(); //隐藏裁剪图片的div
+			$(".page_confirmBtn").hide(); //隐藏 确定裁剪按钮
+			$(".move-box").fadeIn(); //显示上传的图片
+			$(".chooseWatches").fadeIn(); //显示手表列表
+			$(".page_finishBtn").show(); //显示 完成试戴按钮
+		})
+		//点击手表   
+		$(".watches").click(function() {
+			var watchImg = $(this).attr("data-src");
+			$(".js-divobject").removeClass("hidden");
+			objectDeg=-22;
+			$("#object-div .js-divobject").css({"width":"1.3rem","height":"1.3rem","transform":"rotate(-22deg)"});
+			$(".js-divobject").css({
+				"background-image": "url(" + watchImg + ")",
+				"left": "22px",
+				"top": "140px"
+			});
+			$("#object-div").children(".js-divobject").removeClass("br2").children(".bg-border").hide();
+		})
+		//拖动手表
+		var touchStart_x = null,
+			touchStart_y = null,
+			touchMove_x = null,
+			touchMove_y = null,
+			boxStartX = null,
+			boxStartY = null,
+			initX = null,
+			initY = null;
+		var start = [];
+		$("body").on("touchstart", ".js-divobject", function(e) {
+			touchStart_x = e.originalEvent.targetTouches[0].pageX;
+			touchStart_y = e.originalEvent.targetTouches[0].pageY;
+			boxStartX = $(".js-divobject").position().left;
+			boxStartY = $(".js-divobject").position().top;
+			//初始位置的X，Y 坐标  
+			initX = e.target.offsetLeft;
+			initY = e.target.offsetTop;
+			if(e.originalEvent.touches.length >= 2) { //判断是否有两个点在屏幕上
+				start = e.originalEvent.touches; //得到第一组两个点
+			};
+			$(this).children(".bg-border").show();
+			$(this).addClass("br2");
+			isTouch = true;
+		})
+
+		$("body").on("touchmove", ".js-divobject", function(e) {
+			e.preventDefault();
+			touchMove_x = e.originalEvent.targetTouches[0].pageX * 1 - touchStart_x * 1;
+			touchMove_y = e.originalEvent.targetTouches[0].pageY * 1 - touchStart_y * 1;
+			 if (e.originalEvent.touches.length >= 2) {
+			 	 var now = e.originalEvent.touches;
+			 	 Math.abs(e.originalEvent.touches[0].pageX-e.originalEvent.touches[1].pageX);
+			 	  //当前距离变小  
+				 if(getDistance(now[0], now[1]) < getDistance(start[0], start[1])){
+				 	obgW--;
+				    zoomW=obgW/100; 
+				    if(obgW<=100){return}
+				    $(".js-divobject").css({"width":zoomW+"rem","height":zoomW+"rem"})
+				 };
+				 if(getDistance(now[0], now[1]) > getDistance(start[0], start[1])){
+				 	obgW++;
+				    zoomW=obgW/100; 
+				    if(obgW>=200){return}
+				    $(".js-divobject").css({"width":zoomW+"rem","height":zoomW+"rem"})
+				 };
+				 return;
+			 }
+			  // 一根 手指 执行 目标元素移动 操作
+			if(e.originalEvent.touches.length == 1) {
+				$(".js-divobject").css({
+					left: boxStartX + touchMove_x + 24,
+					top: boxStartY + touchMove_y + 24
+				});
+			}
+		});
+		$("body").on("touchmove", ".js-divobject", function(e) {
+			if (isTouch) {isTouch = false}
+		})
+		
+		function getDistance(p1, p2) {
+		    var x = p2.pageX - p1.pageX,
+		    y = p2.pageY - p1.pageY;
+		    return Math.sqrt((x * x) + (y * y));
+       };
+       //点击旋转
+       $("#object-div .icon-rotate").mousedown(function(e) {
+         	 e.stopPropagation();
+         	 objectDeg+=30;
+         	 if(objectDeg>=338){
+         	 	objectDeg=-22;
+         	 }
+			 $("#object-div .js-divobject").css("transform",'rotate('+objectDeg+'deg)')
+		})
+       
+		//点击上传的图片
+		$("#object-div").mousedown(function() {
+			$(this).children(".js-divobject").removeClass("br2").children(".bg-border").hide();
+		})
+		
+		
+		
+		//点击完成试戴
+		$(".btn-finish").click(function() {
+			var BoxWidth = $(".btn-finish").width() * 1;
+			BoxHeight = $(".btn-finish").height() * 1;
+			if($("#object-div .js-divobject").hasClass("hidden")) {
+				alert("请任意选择一款腕表进行试戴");
+				return;
+			}
+			$("#object-div").children(".js-divobject").removeClass("br2").children(".bg-border").hide();
+			html2canvas(document.getElementById("object-div"), {
+					scale: 2
+				})
+				.then(function(canvas) {
+					//运用canvas来合成手表与背景图片的照片
+					var img = document.getElementById("finishImage");
+					var url = canvas.toDataURL("image/png", 0.1);
+					img.src = url;
+					//运用canvas来合成保存的图片  （带二维码）
+					img.onload = function() { //当背景图片加载完成后 开始合成海报
+						$(".chooseWatches").hide();
+						$(".page_finishBtn").hide();
+						$("#object-div").hide();
+						$(".finish").show();
+						$(".tipsTap").show();
+						$(".page_toendBtn").show();
+						var canvas = document.getElementById("canvasEnd"), //获取canvas节点
+							imgShare = document.getElementById("shareImage"), //获取分享图片的节点
+							ctx = canvas.getContext("2d"),
+							newImg = new Image();
+						newImg.src = "img/img-end.png";
+						newImg.onload = function() { //图片加载完成后合成
+							ctx.clearRect(0, 0, canvas.width, canvas.height); //清屏
+							ctx.drawImage(this, 0, 0, canvas.width, canvas.height); //绘制上层图
+							ctx.drawImage(img, 96, 194, 448, 600); //绘制试戴合成图
+							var endUrl = canvas.toDataURL("image/png", 0.1);
+							imgShare.src = endUrl;
+						}
+
+					}
+				})
+
+		})
+	</script>
+
+</html>
