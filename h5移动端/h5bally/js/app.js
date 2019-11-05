@@ -458,22 +458,22 @@
         pinch: function (evt) {
             //evt.scale代表两个手指缩放的比例
             element.style.transform = 'scale('+evt.scale+')';
-            element.scaleX = element.scaleY = initScale * evt.zoom;
+            // element.scaleX = element.scaleY = initScale * evt.zoom;
             console.log(evt.scale,evt.zoom);
         },
         multipointEnd: function () {
             //当手指离开，屏幕只剩一个手指或零个手指触发
-            To.stopAll();
-            if (element.scaleX < 1) {
+            // To.stopAll();
+            // if (element.scaleX < 1) {
 
-                new To(element, "scaleX", 1, 500, ease);
-                new To(element, "scaleY", 1, 500, ease);
-            }
-            if (element.scaleX > 2) {
+            //     new To(element, "scaleX", 1, 500, ease);
+            //     new To(element, "scaleY", 1, 500, ease);
+            // }
+            // if (element.scaleX > 2) {
 
-                new To(element, "scaleX", 2, 500, ease);
-                new To(element, "scaleY", 2, 500, ease);
-            }
+            //     new To(element, "scaleX", 2, 500, ease);
+            //     new To(element, "scaleY", 2, 500, ease);
+            // }
         },
         pressMove: function (evt) {
             //evt.deltaX和evt.deltaY代表在屏幕上移动的距离
