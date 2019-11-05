@@ -22,14 +22,19 @@
         closeEle = document.getElementsByClassName('a-close'),//获取拖拽元素关闭及缩放按钮
         closeImg = document.getElementsByClassName('img-close')[0],//获取关闭生成的图片
         showImgBox = document.getElementsByClassName('show-img')[0],//显示图片
+        cList = document.getElementsByClassName('c-list'),//获取颜色列表
+        cListDiv = document.getElementsByClassName('c-list-b'),
+        colorIndex,//暂存上一个颜色
+        fList = document.getElementsByClassName('f-list'),//获取字体列表
+        folorIndex,//暂存上一个字体
         imgSite = 'http://img.ibaiqiu.com/pim-upload/6226219-124-1-1699-2-main.jpg',//开始要绘制的图片地址
         base64Img = '',
         fontList = [
             {font:'微软雅黑'},
-            {font:'宋体'},
-            {font:'楷体'}
+            {font:'宋体'}
         ]
         colorList = [
+            {color:'#000000'},
             {color:'#FFFF00'},
             {color:'#CCFF00'},
             {color:'#99FF00'},
@@ -40,7 +45,8 @@
             {color:'#FF0000'},
             {color:'#9900FF'},
             {color:'#3333FF'},
-            {color:'#FF6600'}],//颜色列表
+            {color:'#FF6600'}
+        ],//颜色列表
         fontBoxState = true,//字体盒子状态
         colorBoxState = true,//颜色盒子状态
         footerState = true,//底部盒子状态
@@ -69,9 +75,10 @@
         // inputNode.style.transition = '0s';
 
         // element.innerHTML = '请输入内容';//清空输入框内容
-        inputValue.value = '';
-        element.style.display = dragState?'block':'none';
-        dragState = !dragState;
+        // inputValue.value = '';
+        // element.style.display = 'block';
+        // element.style.display = dragState?'block':'none';
+        // dragState = !dragState;
 
         // clickParalle();//变横向
 
@@ -101,9 +108,7 @@
     getColorList();//遍历颜色
     //点击颜色操作
     function clickColorList(){
-        var cList = document.getElementsByClassName('c-list');
-        var cListDiv = document.getElementsByClassName('c-list-b');
-        var colorIndex;
+        
         for(var i=0;i<cList.length;i++){
             (function(i){
                 cList[i].onclick = function(){
@@ -123,9 +128,9 @@
                 }
             }(i));
         }
-        clickLeave();//点击离开
+        
     }
-    clickColorList();//点击颜色
+
 
     //遍历字体
     function getFontList(){
@@ -144,8 +149,7 @@
     getFontList();//遍历字体
     //点击字体操作
     function clickFontList(){
-        var fList = document.getElementsByClassName('f-list');
-        var folorIndex;
+        
         for(var i=0;i<fList.length;i++){
             (function(i){
                 fList[i].onclick = function(){
@@ -159,24 +163,38 @@
                 }
             }(i));
         }
-        clickLeave();//点击离开
+        
     }
-    clickFontList();//点击字体
+
 
     //点击离开
     function clickLeave(){
-        cOff[0].onclick = function(){
-            clickColor();
-        }
+        // var saveColor = 'rgb(0,0,0)';//存上一个颜色
         fOff[0].onclick = function(){
             clickFont();
         }
+        cOff[0].onclick = function(){
+            // saveColor = eleText.style.color;
+            clickColor();
+        }
+        // cOff[0].onclick = function(){
+        //     eleText.style.color = saveColor;
+        //     console.log(eleText.style.color);
+        //     clickColor();
+        // }
+        // fOff[0].onclick = function(){
+        //     clickFont();
+        // }
     }
-    //点击关闭
+    clickLeave();//点击离开
+
+    //点击关闭拖拽元素
     function clickCloseEle(){
         closeEle[0].onclick = function(){
+            footerState = false;
             iconBtnMethod();
             iconBtn.style.display = 'none';
+            element.style.display = 'none';
             colorwhite(0);
         }
     }
@@ -207,6 +225,11 @@
         if(inputState){
             inputNode.style.bottom = '4.5rem';
             inputNode.style.transition = '.2s';
+            footerState = true;
+            iconBtn.style.display = 'block';
+            navNode[0].style.color = '#282828';
+            iconBtnMethod();
+            
         }
         // inputNode.style.bottom = inputState?'4.5rem':'0.5rem';//input框变化
         // inputNode.style.transition = inputState?'.2s':'0s';
@@ -265,6 +288,8 @@
         // colorBox.style.display = 'none';
         // fontBox.style.display = fontBox.style.display=='none'?'block':'none';
         fontBoxState = !fontBoxState;
+
+        clickFontList();//点击字体
     }
 
     //点击颜色操作方法
@@ -277,6 +302,8 @@
         // fontBox.style.display = 'none'
         // colorBox.style.display = colorBox.style.display=='none'?'block':'none';
         colorBoxState = !colorBoxState;
+
+        clickColorList();//点击颜色
     }
     //加粗操作
     function clickOverstriking(){
@@ -335,6 +362,7 @@
                     //绘制文字操作
                     colorblank(i);//点击颜色变黑
                     drawText();//显示节点
+                    element.style.display = 'block';
                     console.log('绘制文字');
                 }
                 if(i==1){
@@ -376,11 +404,11 @@
     function createImg(){
         base64Img = canvasNode.toDataURL('image/png');
         console.log(base64Img);
-        showImgBox.style.display = 'block';
         document.getElementsByClassName('s-img')[0].src = base64Img;
         element.style.borderColor = 'rgba(245, 118, 118,1)';
         closeEle[0].style.display='block';
         closeEle[1].style.display='block';
+        showImgBox.style.display = 'block';
         
     }
     //关闭生成的图片
@@ -494,25 +522,25 @@
     oFz.style.fontSize = width/10 +"px";
     window.onresize=function(){change();};
 })();
-// //阻止Safari等浏览器 页面缩放
-// window.onload = function() {
-//     // 阻止双击放大
-//     var lastTouchEnd = 0;
-//     document.addEventListener('touchstart', function(event) {
-//         if (event.touches.length > 1) {
-//             event.preventDefault();
-//         }
-//     });
-//     document.addEventListener('touchend', function(event) {
-//         var now = (new Date()).getTime();
-//         if (now - lastTouchEnd <= 300) {
-//             event.preventDefault();
-//         }
-//         lastTouchEnd = now;
-//     }, false);
-//
-//     // 阻止双指放大
-//     document.addEventListener('gesturestart', function(event) {
-//         event.preventDefault();
-//     });
-// }
+//阻止Safari等浏览器 页面缩放
+window.onload = function() {
+    // 阻止双击放大
+    var lastTouchEnd = 0;
+    document.addEventListener('touchstart', function(event) {
+        if (event.touches.length > 1) {
+            event.preventDefault();
+        }
+    });
+    document.addEventListener('touchend', function(event) {
+        var now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+
+    // 阻止双指放大
+    document.addEventListener('gesturestart', function(event) {
+        event.preventDefault();
+    });
+}
